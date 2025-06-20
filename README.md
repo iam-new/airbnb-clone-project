@@ -57,6 +57,61 @@ Caching: Use caching strategies to reduce database load and improve performance.
 4. QA Engineer: Ensures the backend functionalities are thoroughly tested and meet quality standards.
 
 ## Database Design Overview
+Key Entities & Relationships
+1. Users
+Key Fields:
+
+user_id (Primary Key)
+email (Unique)
+password_hash
+first_name, last_name
+user_type (guest/host/both)
+
+2. Properties
+Key Fields:
+
+property_id (Primary Key)
+host_id (Foreign Key → Users)
+title, description
+location (city, country)
+price_per_night
+
+3. Bookings
+Key Fields:
+
+booking_id (Primary Key)
+property_id (Foreign Key → Properties)
+guest_id (Foreign Key → Users)
+check_in_date, check_out_date
+booking_status
+
+4. Payments
+Key Fields:
+
+payment_id (Primary Key)
+booking_id (Foreign Key → Bookings)
+amount
+payment_method
+payment_status
+
+5. Reviews
+Key Fields:
+
+review_id (Primary Key)
+property_id (Foreign Key → Properties)
+guest_id (Foreign Key → Users)
+rating (1-5)
+comment
+
+### Entity Relationships
+1. Users → Properties: One user can own multiple properties (1:M)
+2. Users → Bookings: One user can make multiple bookings (1:M)
+3. Properties → Bookings: One property can have multiple bookings (1:M)
+4. Bookings → Payments: One booking can have multiple payments (1:M)
+5. Properties → Reviews: One property can have multiple reviews (1:M)
+6. Bookings → Reviews: One booking can have one review (1:1)
+
+
 
 
 ## 📈 API Documentation Overview
@@ -99,6 +154,48 @@ REST API Endpoints
 
 ## API Security Overview
 
+### Authentication & Authorization
+- JWT tokens for stateless authentication
+- Role-based access control (guest/host permissions)
+- API key authentication for third-party integrations
+
+### Security Measures
+- Input validation and sanitization on all endpoints
+- Rate limiting to prevent abuse (100 requests/minute per user)
+- HTTPS enforcement for all API communications
+- CORS configuration for cross-origin requests
+- SQL injection protection through parameterized queries
+
+### Data Protection
+- Password hashing using bcrypt
+- Sensitive data encryption (payment info, personal details)
+- API versioning to maintain backward compatibility
+- Request/response logging for audit trails
+
 ## CI/CD Pipeline Overview
+
+### Source Control
+- Git workflow: Feature branches → Pull requests → Main branch
+- Code review requirements before merge
+- Automated testing on pull requests
+
+### Build & Test Pipeline
+- Code quality checks (linting, formatting)
+- Unit tests (minimum 80% coverage)
+- Integration tests (API endpoint testing)
+- Security scanning (dependency vulnerabilities)
+
+### Deployment Pipeline
+- Staging deployment for testing
+- Database migrations (automated)
+- Production deployment (blue-green strategy)
+- Health checks and rollback capabilities
+
+### Tools & Infrastructure
+- GitHub Actions for CI/CD automation
+- Docker containers for consistent environments
+- AWS/Azure for cloud deployment
+- Monitoring with alerts for system health
+
 
 **Author:** [Mithamo Beth](github.com/Mythamor)
